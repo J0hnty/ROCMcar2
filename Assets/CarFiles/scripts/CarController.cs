@@ -44,6 +44,7 @@ public class CarController : MonoBehaviour
     private void FixedUpdate()
     {
         GetInput();
+        GearShift();
         HandleMotor();
         HandleSteering();
         UpdateWheels();
@@ -66,46 +67,8 @@ public class CarController : MonoBehaviour
         {
 
         }
-        switch (gearShift)
-        {
-            case 1:
-                if (Input.GetKey(KeyCode.Alpha1))
-                {
-                    gearShift = 1;
-                    test = true;
-                }
-                
-                
-                break;
-            case 2:
-                if (Input.GetKey(KeyCode.Alpha2))
-                {
-                    gearShift = 2;
-                    test = true;
-                }
 
-                break;
-            case 3:
-                Input.GetKey(KeyCode.Alpha3);
-                gearShift = 3;
-                break;
-            case 4:
-                Input.GetKey(KeyCode.Alpha4);
-                gearShift = 4;
-                break;
-            case 5:
-                Input.GetKey(KeyCode.Alpha5);
-                gearShift = 5;
-                break;
-            case 6:
-                Input.GetKey(KeyCode.Alpha6);
-                gearShift = 6;
-                break;
-            default:
-                Input.GetKey(KeyCode.Alpha0);
-
-                break;  
-        }
+        
         /*
             StartCoroutine(waiter());
             IEnumerator waiter()
@@ -125,6 +88,151 @@ public class CarController : MonoBehaviour
             }
         */
     
+    }
+
+    private void GearShift()
+    {
+        if (Input.GetKey(KeyCode.Alpha1))
+        {
+
+            gearShift = 1;
+
+        }
+        else if (Input.GetKey(KeyCode.Alpha2))
+        {
+            if (currentSpeed >= 15)
+            {
+                gearShift = 2;
+
+            }
+
+        }
+        else if (Input.GetKey(KeyCode.Alpha3))
+        {
+            if (currentSpeed >= 30) 
+            { 
+                gearShift = 3; 
+            
+            }
+
+        }
+        else if (Input.GetKey(KeyCode.Alpha4))
+        {
+            if (currentSpeed >= 45)
+            {
+                gearShift = 4;
+            }
+            
+        
+        }
+        else if (Input.GetKey(KeyCode.Alpha5))
+        {
+            if (currentSpeed >= 60)
+            {
+                gearShift = 5;
+            }
+            
+                  
+        }
+        else if (Input.GetKey(KeyCode.Alpha6))
+        {
+            if (currentSpeed >= 75)
+            {
+                gearShift = 6;
+            }
+            
+
+        }
+        else
+        {
+            Input.GetKey(KeyCode.Alpha0);
+        }
+        /**
+        if (Input.GetKey(KeyCode.Alpha1))
+        {
+            gearShift = 1;
+
+
+        } 
+        else if (Input.GetKey(KeyCode.Alpha2))
+        {
+            if (currentSpeed >= 15)
+            {
+                Debug.Log("1");
+                if (gearShift >= 4)
+                {
+                    Debug.Log("2");
+                    gearShift = 2;
+                    test = true;
+                }
+                if ( gearShift !>= 4)
+                {
+                    Debug.Log("3");
+                    gearShift = 2;
+                    test = true;
+                }
+            }
+           
+
+        } 
+        else if (Input.GetKey(KeyCode.Alpha3))
+        {
+            if (currentSpeed >= 30)
+            {
+                if (gearShift !<= 1 && gearShift !>= 5)
+                {
+                    gearShift = 3;
+                    test = true;
+                }
+            }
+
+
+        } 
+        else if (Input.GetKey(KeyCode.Alpha4))
+        {
+            if (currentSpeed >= 45)
+            {
+                if (gearShift !<= 2 && gearShift !>= 6)
+                {
+                    gearShift = 4;
+                    test = true;
+                }
+            }
+            
+
+        } 
+        else if (Input.GetKey(KeyCode.Alpha5))
+        {
+            if (currentSpeed >= 70)
+            {
+                if (gearShift !<= 3 && gearShift !>= 7)
+                {
+                    gearShift = 5;
+                    test = true;
+                }
+            }
+            
+
+        } 
+        else if (Input.GetKey(KeyCode.Alpha6))
+        {
+            if (currentSpeed >= 100)
+            {
+                if (gearShift !<= 4 && gearShift !>= 8)
+                {
+                    gearShift = 6;
+                    test = true;
+                }
+            }
+
+
+        } 
+        else
+        {
+            Input.GetKey(KeyCode.Alpha0);
+        } 
+        */
+        
     }
 
     private void HandleMotor()
@@ -162,11 +270,6 @@ public class CarController : MonoBehaviour
             case 5:
                 motorForce = 500;
 
-
-                break;
-            case 6:
-                motorForce = 600;
-                
 
                 break;
             default:
