@@ -1,0 +1,13 @@
+UserSettings filter=lfs diff=lfs merge=lfs -text
+Assembly-CSharp.csproj filter=lfs diff=lfs merge=lfs -text
+Logs filter=lfs diff=lfs merge=lfs -text
+Packages filter=lfs diff=lfs merge=lfs -text
+README.md filter=lfs diff=lfs merge=lfs -text
+ROCMcar0.2.sln filter=lfs diff=lfs merge=lfs -text
+ROCMcar1.1.sln filter=lfs diff=lfs merge=lfs -text
+obj filter=lfs diff=lfs merge=lfs -text
+Assets filter=lfs diff=lfs merge=lfs -text
+Library filter=lfs diff=lfs merge=lfs -text
+ProjectSettings filter=lfs diff=lfs merge=lfs -text
+ROCMcar[[:space:]]old[[:space:]]car.sln filter=lfs diff=lfs merge=lfs -text
+ROCMcar.sln filter=lfs diff=lfs merge=lfs -text
