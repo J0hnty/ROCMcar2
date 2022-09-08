@@ -899,11 +899,11 @@ MonoBehaviour:
   currentSpeed: 0
   spawnpoint: {fileID: 7973262603252285, guid: 9447f18772a35db4c9ec580667306031, type: 3}
   maxSpeed: 9999999
-  gearShift: 1
+  gearShift: 0
   car: {fileID: 6351264823566619917}
   rb: {fileID: 0}
   isRespawning: 0
-  motorForce: 500
+  motorForce: 0
   breakForce: 6000
   maxSteerAngle: 80
   FLWCollider: {fileID: 7835027447938144841}
