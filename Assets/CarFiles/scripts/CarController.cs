@@ -12,14 +12,13 @@ public class CarController : MonoBehaviour
     private float verticalInput;
     private float currentSteerAngle;
     private float currentBreakForce;
+    public bool isBreaking;
     public float currentSpeed;
+    public Transform spawnpoint;
     public float maxSpeed;
     public int gearShift = 1;
-    public bool gearShiftInput;
-    public bool isBreaking;
-    public Rigidbody rb;
     public GameObject car;
-    public Transform spawnpoint;
+    public Rigidbody rb;
     public bool isRespawning;
 
     [SerializeField] private float motorForce;
@@ -49,6 +48,10 @@ public class CarController : MonoBehaviour
         {
             Respawn();
         }
+        if (Input.GetKey(KeyCode.T))
+        {
+            Teleport();
+        }
     }
 
     private void GetInput()
@@ -58,86 +61,72 @@ public class CarController : MonoBehaviour
         if (!isRespawning)
         {
             isBreaking = Input.GetKey(KeyCode.Space);
-
         }
-        StartCoroutine(waiter());
-        IEnumerator waiter()
-        {
-            //Wait for 4 seconds
-            if (gearShiftInput = Input.GetKeyDown(KeyCode.E))
-            {
-                gearShift++;
-                yield return new WaitForSeconds(3);
-            }
-            else if (gearShiftInput = Input.GetKeyDown(KeyCode.Q))
-            {
-                gearShift--;
-                yield return new WaitForSeconds(3);
-            }
 
-        }
-        /*if (gearShiftInput = Input.GetKeyDown(KeyCode.E))
-        {
-            gearShift++;
-
-        } else if (gearShiftInput = Input.GetKeyDown(KeyCode.Q))
-        {
-            gearShift--;
-
-        }*/
     }
 
     private void HandleMotor()
     {
         rb = GetComponent<Rigidbody>();
         currentSpeed = rb.velocity.magnitude * 3.6f;
-        
-
-        switch (gearShift) {
-            case 0:
-                motorForce = 0;
-
-                break;
-            case 1:
-                motorForce = 100;
+       
 
 
-                break;
-            case 2:
-                motorForce = 200;
-
-
-                break;
-            case 3:
-                motorForce = 300;
-
-
-                break;
-            case 4:
-                motorForce = 400;
-
-
-                break;
-            case 5:
-                motorForce = 500;
-
-
-                break;
-            default:
-                if (gearShift<0)
-                {
-                    gearShift = 0;
-                }
-                if (gearShift > 5)
-                {
-                    gearShift = 5;
-                }
-                break;
+        if (currentSpeed >= 0f && currentSpeed < maxSpeed)
+        {
+            FRWCollider.motorTorque = verticalInput * motorForce;
+            FLWCollider.motorTorque = verticalInput * motorForce;
+           // RLWCollider.motorTorque = verticalInput * motorForce;
+           // RRWCollider.motorTorque = verticalInput * motorForce;
+            gearShift = 1;
         }
-
-        FRWCollider.motorTorque = verticalInput * motorForce;
-        FLWCollider.motorTorque = verticalInput * motorForce;
-
+        else if (currentSpeed >= 20f && currentSpeed < maxSpeed)
+        {
+            FRWCollider.motorTorque = verticalInput * motorForce;
+            FLWCollider.motorTorque = verticalInput * motorForce;
+         //   RLWCollider.motorTorque = verticalInput * motorForce;
+          //  RRWCollider.motorTorque = verticalInput * motorForce;
+            gearShift = 2;
+        }
+        else if (currentSpeed >= 40f && currentSpeed < maxSpeed)
+        {
+            FRWCollider.motorTorque = verticalInput * motorForce;
+            FLWCollider.motorTorque = verticalInput * motorForce;
+          //  RLWCollider.motorTorque = verticalInput * motorForce;
+           // RRWCollider.motorTorque = verticalInput * motorForce;
+            gearShift = 3;
+        }
+        else if (currentSpeed >= 60f && currentSpeed < maxSpeed)
+        {
+            FRWCollider.motorTorque = verticalInput * motorForce;
+            FLWCollider.motorTorque = verticalInput * motorForce;
+          //  RLWCollider.motorTorque = verticalInput * motorForce;
+          // RRWCollider.motorTorque = verticalInput * motorForce;
+            gearShift = 4;
+        }
+        
+        else if (currentSpeed >= 80f && currentSpeed < maxSpeed)
+        {
+            FRWCollider.motorTorque = verticalInput * motorForce;
+            FLWCollider.motorTorque = verticalInput * motorForce;
+           // RLWCollider.motorTorque = verticalInput * motorForce;
+           // RRWCollider.motorTorque = verticalInput * motorForce;
+            gearShift = 5;
+        }
+        else if (currentSpeed >= maxSpeed)
+        {
+            FLWCollider.motorTorque = 0f;
+            FRWCollider.motorTorque = 0f;
+           // RLWCollider.motorTorque = 0f;
+          //  RRWCollider.motorTorque = 0f;
+        }
+        else
+        {
+            FRWCollider.motorTorque = verticalInput * motorForce;
+            FLWCollider.motorTorque = verticalInput * motorForce;
+          //  RLWCollider.motorTorque = verticalInput * motorForce;
+           // RRWCollider.motorTorque = verticalInput * motorForce;
+        }
         currentBreakForce = isBreaking ? breakForce : 0f;
         if (isBreaking)
         {
@@ -217,6 +206,20 @@ public class CarController : MonoBehaviour
 
             }
 
-        }
+     }
+
+    private void Teleport()
+    {
+
+
+
+        transform.position = spawnpoint.position;
+        transform.rotation = spawnpoint.rotation;
+
+
     }
+
+
+
+}
 
