@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 using static CarController;
 
 public class GameManager : MonoBehaviour
@@ -10,6 +11,7 @@ public class GameManager : MonoBehaviour
     public GameObject spawnedCar;
     public float penalty;
 
+    public TextMeshProUGUI warningUI;
     public CarController CC;
     public GameObject needle;
     private float startPos = 220f, endPos = -40;
@@ -22,6 +24,7 @@ public class GameManager : MonoBehaviour
       spawnedCar = Instantiate(car, spawnpoint.position, spawnpoint.rotation);
         spawnedCar.name = "ROCMcar";
        CC = spawnedCar.GetComponent<CarController>();
+        warningUI.text = "";
     }
 
     private void FixedUpdate()

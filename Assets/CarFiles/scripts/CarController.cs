@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using static GameManager;
 
 public class CarController : MonoBehaviour
 {
@@ -10,17 +12,26 @@ public class CarController : MonoBehaviour
 
     public float horizontalInput;
     public float verticalInput;
-    private float horizontalForce;
+
     private float currentSteerAngle;
     private float currentBreakForce;
     public bool isBreaking;
     public float currentSpeed;
     public Transform spawnpoint;
-    public float maxSpeed;
-    public int gearShift = 1;
+    public int gearShift = 0;
+    public int oldGearShift = 0;
+    public float gearShiftInput;
     public GameObject car;
     public Rigidbody rb;
     public bool isRespawning;
+    //car stats
+    public float maxSpeed = 0;
+    public float maxGear = 0;
+    public float motorForceMultiplier = 0;
+    //=========
+
+    public GameManager gameManager;
+    public GameObject GMO;
 
     [SerializeField] private float motorForce;
     [SerializeField] private float breakForce;
@@ -30,109 +41,186 @@ public class CarController : MonoBehaviour
     [SerializeField] private WheelCollider FRWCollider;
     [SerializeField] private WheelCollider RLWCollider;
     [SerializeField] private WheelCollider RRWCollider;
-    
+
     [SerializeField] private Transform FLWTransform;
     [SerializeField] private Transform FRWTransform;
     [SerializeField] private Transform RLWTransform;
     [SerializeField] private Transform RRWTransform;
 
+    private void Start()
+    {
+        GMO = GameObject.Find("GameManager");
+        gameManager = GMO.GetComponent<GameManager>();
+    }
 
-
-
+    // hier worden alle gebruikte functie aan geroepen
     private void FixedUpdate()
     {
         GetInput();
         HandleMotor();
+        GearShift();
         HandleSteering();
         UpdateWheels();
         if (Input.GetKey(KeyCode.R))
-        {
             Respawn();
-        }
         if (Input.GetKey(KeyCode.T))
-        {
             Teleport();
-        }
-
-
-
-
     }
 
+
+    //hier worden alle inputs gevraagt
     private void GetInput()
     {
         horizontalInput = Input.GetAxis(HORIZONTAL);
         verticalInput = Input.GetAxis(VERTICAL);
         if (!isRespawning)
-        {
             isBreaking = Input.GetKey(KeyCode.Space);
+    }
+    private void GearChangeCheck(int gearShiftHold)
+    {
+        if (currentSpeed <= 5 && gearShift >= 3 && Input.GetKey(KeyCode.W))
+        {
+            gameManager.warningUI.text = "gearshift too high to drive away";
+            motorForce = 0;
+            StartCoroutine(warningTimer());
+            IEnumerator warningTimer()
+            {
+                //Wait for 5 seconds
+                yield return new WaitForSeconds(5);
+                gameManager.warningUI.text = "";
+            }
         }
 
+        if (gearShiftHold - oldGearShift == 1)
+        {
+            oldGearShift++;
+            Debug.Log("if");
+            ChangeMotorForce();
+        }
+        else if (
+          gearShiftHold - oldGearShift == -1 ||
+          gearShiftHold - oldGearShift == -2 ||
+          gearShiftHold - oldGearShift == -3 ||
+          gearShiftHold - oldGearShift == -4 ||
+          gearShiftHold - oldGearShift == -5)
+        {
+            oldGearShift--;
+            Debug.Log("terug schakelen");
+            ChangeMotorForce();
+        }
+        else if (gearShiftHold - oldGearShift >= 2)
+        {
+            Debug.Log("else if");
+            gearShift = 0;
+            oldGearShift = 0;
+            ChangeMotorForce();
+        }
     }
 
+
+    private void ChangeMotorForce()
+    {
+        Debug.Log("motor force");
+        // Debug.Log(gearShift);
+        //deze switch zorgt er voor dat de motorForce meegaat met de versnelling.
+        switch (gearShift)
+        {
+            case 0:
+                motorForce = 0;
+                Debug.Log("gear 0");
+                break;
+            case 1:
+                motorForce = 200;
+                Debug.Log("gear 1");
+                break;
+            case 2:
+                motorForce = 300;
+                Debug.Log("gear 2");
+                break;
+            case 3:
+                motorForce = 400;
+                Debug.Log("gear 3");
+                break;
+            case 4:
+                motorForce = 550;
+                Debug.Log("gear 4");
+                break;
+            case 5:
+                motorForce = 600;
+                Debug.Log("gear 5");
+                break;
+            case 6:
+                motorForce = 700;
+                Debug.Log("gear 6");
+                break;
+            default:
+                if (gearShift < 0 || gearShift > 5)
+                gearShift = 0;
+                break;
+        }
+    }
+
+    private void GearShift()
+    {
+        GearChangeCheck(gearShift);
+        //GearInputs();
+        // deze if statements moeten er voor zorgen dat-
+        // de auto in een versnelling gaat.
+        if (Input.GetKey(KeyCode.Alpha1))
+        {
+            gearShift = 1;
+            GearChangeCheck(gearShift);
+        }
+        else if (Input.GetKey(KeyCode.Alpha2))
+        {
+            gearShift = 2;
+            if (currentSpeed < 15)
+                gearShift = 0;
+            GearChangeCheck(gearShift);
+        }
+        else if (Input.GetKey(KeyCode.Alpha3))
+        {
+            gearShift = 3;
+            if (currentSpeed < 30)
+                gearShift = 0;
+            GearChangeCheck(gearShift);
+        }
+        else if (Input.GetKey(KeyCode.Alpha4))
+        {
+            gearShift = 4;
+            if (currentSpeed < 70)
+                gearShift = 0;
+            GearChangeCheck(gearShift);
+        }
+        else if (Input.GetKey(KeyCode.Alpha5))
+        {
+            gearShift = 5;
+            if (currentSpeed < 100)
+                gearShift = 0;
+            GearChangeCheck(gearShift);
+        }
+        else if (Input.GetKey(KeyCode.Alpha6))
+        {
+            gearShift = 6;
+            if (currentSpeed < 150)
+                gearShift = 0;
+            GearChangeCheck(gearShift);
+        }
+    }
+
+    // deze functie zorgt voor alles wat met de motor te maken heeft
     private void HandleMotor()
     {
+        // hier komt de rigidbody 'auto' binnen
+        // en wordt current speed omgezet van meter/seconde naar km/u
         rb = GetComponent<Rigidbody>();
         currentSpeed = rb.velocity.magnitude * 3.6f;
-       
 
+        // deze formules zorgen er voor dat de auto rijd
+        FRWCollider.motorTorque = verticalInput * motorForce;
+        FLWCollider.motorTorque = verticalInput * motorForce;
 
-
-        if (currentSpeed >= 0f && currentSpeed < maxSpeed)
-        {
-            FRWCollider.motorTorque = verticalInput * motorForce;
-            FLWCollider.motorTorque = verticalInput * motorForce;
-           // RLWCollider.motorTorque = verticalInput * motorForce;
-           // RRWCollider.motorTorque = verticalInput * motorForce;
-            gearShift = 1;
-        }
-        else if (currentSpeed >= 20f && currentSpeed < maxSpeed)
-        {
-            FRWCollider.motorTorque = verticalInput * motorForce;
-            FLWCollider.motorTorque = verticalInput * motorForce;
-         //   RLWCollider.motorTorque = verticalInput * motorForce;
-          //  RRWCollider.motorTorque = verticalInput * motorForce;
-            gearShift = 2;
-        }
-        else if (currentSpeed >= 40f && currentSpeed < maxSpeed)
-        {
-            FRWCollider.motorTorque = verticalInput * motorForce;
-            FLWCollider.motorTorque = verticalInput * motorForce;
-          //  RLWCollider.motorTorque = verticalInput * motorForce;
-           // RRWCollider.motorTorque = verticalInput * motorForce;
-            gearShift = 3;
-        }
-        else if (currentSpeed >= 60f && currentSpeed < maxSpeed)
-        {
-            FRWCollider.motorTorque = verticalInput * motorForce;
-            FLWCollider.motorTorque = verticalInput * motorForce;
-          //  RLWCollider.motorTorque = verticalInput * motorForce;
-          // RRWCollider.motorTorque = verticalInput * motorForce;
-            gearShift = 4;
-        }
-        
-        else if (currentSpeed >= 80f && currentSpeed < maxSpeed)
-        {
-            FRWCollider.motorTorque = verticalInput * motorForce;
-            FLWCollider.motorTorque = verticalInput * motorForce;
-           // RLWCollider.motorTorque = verticalInput * motorForce;
-           // RRWCollider.motorTorque = verticalInput * motorForce;
-            gearShift = 5;
-        }
-        else if (currentSpeed >= maxSpeed)
-        {
-            FLWCollider.motorTorque = 0f;
-            FRWCollider.motorTorque = 0f;
-           // RLWCollider.motorTorque = 0f;
-          //  RRWCollider.motorTorque = 0f;
-        }
-        else
-        {
-            FRWCollider.motorTorque = verticalInput * motorForce;
-            FLWCollider.motorTorque = verticalInput * motorForce;
-          //  RLWCollider.motorTorque = verticalInput * motorForce;
-           // RRWCollider.motorTorque = verticalInput * motorForce;
-        }
+        // dit zorgt er voor dat je gaat remmen
         currentBreakForce = isBreaking ? breakForce : 0f;
         if (isBreaking)
         {
@@ -144,6 +232,7 @@ public class CarController : MonoBehaviour
         }
     }
 
+    // deze functie zorgt er voor dat je kunt remmen
     private void ApplyBreaking()
     {
         FRWCollider.brakeTorque = currentBreakForce;
@@ -151,6 +240,8 @@ public class CarController : MonoBehaviour
         RRWCollider.brakeTorque = currentBreakForce;
         RLWCollider.brakeTorque = currentBreakForce;
     }
+
+    // deze functie zorgt er voor dat je kunt stopen remmen
     private void UnApplyBreaking()
     {
         FRWCollider.brakeTorque = 0f;
@@ -159,6 +250,8 @@ public class CarController : MonoBehaviour
         RLWCollider.brakeTorque = 0f;
     }
 
+    // deze functie zorgt er voor dat je kan sturen
+    // door middel van formules.
     private void HandleSteering()
     {
         currentSteerAngle = maxSteerAngle * horizontalInput;
@@ -167,6 +260,8 @@ public class CarController : MonoBehaviour
 
     }
 
+    // deze functie zorgt er voor dat de wielen
+    // mee gaan met de inputs van de user
     private void UpdateWheels()
     {
         UpdateSingleWheel(FLWCollider, FLWTransform);
@@ -175,6 +270,8 @@ public class CarController : MonoBehaviour
         UpdateSingleWheel(RRWCollider, RRWTransform);
     }
 
+    // deze functie zorgt er voor dat het wiel wat meegegeven wordt
+    // mee gaat met de input van de user.
     private void UpdateSingleWheel(WheelCollider WCollider, Transform WTransform)
     {
         Vector3 pos;
@@ -184,6 +281,8 @@ public class CarController : MonoBehaviour
         WTransform.position = pos;
     }
 
+    // deze functie zorgt er voor dat als voorbeeld:
+    // jij van de map valt dat je weer in de map teregt komt.
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.collider.CompareTag("WorldEnd"))
@@ -192,33 +291,30 @@ public class CarController : MonoBehaviour
         }
     }
 
+    // zorgt ervoor dat je respawnd
     private void Respawn()
     {
-
             rb = GetComponent<Rigidbody>();
             rb.Sleep();
             isRespawning = true;
             isBreaking = true;
-
 
             transform.position = spawnpoint.position;
             transform.rotation = spawnpoint.rotation;
             StartCoroutine(waiter());
             IEnumerator waiter()
             {
-                //Wait for 4 seconds
+                //Wait for 3 seconds
                 yield return new WaitForSeconds(3);
                 isBreaking = false;
                 isRespawning = false;
-
             }
+
 
      }
 
     private void Teleport()
     {
-
-
 
         transform.position = spawnpoint.position;
         transform.rotation = spawnpoint.rotation;
