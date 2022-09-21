@@ -8,21 +8,19 @@ public class CarController : MonoBehaviour
     private const string HORIZONTAL = "Horizontal";
     private const string VERTICAL = "Vertical";
 
-    private float horizontalInput;
-    private float verticalInput;
+    public float horizontalInput;
+    public float verticalInput;
+    private float horizontalForce;
     private float currentSteerAngle;
     private float currentBreakForce;
-    public float currentSpeed;
-    public float maxSpeed;
-    public int gearShift = 0;
-    public float gearShiftInput;
     public bool isBreaking;
-    public Rigidbody rb;
-    public GameObject car;
+    public float currentSpeed;
     public Transform spawnpoint;
+    public float maxSpeed;
+    public int gearShift = 1;
+    public GameObject car;
+    public Rigidbody rb;
     public bool isRespawning;
-    public bool shiftGearUp;
-    public bool test = false;
 
     [SerializeField] private float motorForce;
     [SerializeField] private float breakForce;
@@ -44,7 +42,6 @@ public class CarController : MonoBehaviour
     private void FixedUpdate()
     {
         GetInput();
-        GearShift();
         HandleMotor();
         HandleSteering();
         UpdateWheels();
@@ -52,6 +49,14 @@ public class CarController : MonoBehaviour
         {
             Respawn();
         }
+        if (Input.GetKey(KeyCode.T))
+        {
+            Teleport();
+        }
+
+
+
+
     }
 
     private void GetInput()
@@ -61,232 +66,73 @@ public class CarController : MonoBehaviour
         if (!isRespawning)
         {
             isBreaking = Input.GetKey(KeyCode.Space);
-
-        }
-        if (shiftGearUp == true)
-        {
-
         }
 
-        
-        /*
-            StartCoroutine(waiter());
-            IEnumerator waiter()
-            {
-                //Wait for 4 seconds
-                if (gearShiftInput = Input.GetKeyDown(KeyCode.E))
-                {
-                    gearShift++;
-                    yield return new WaitForSeconds(3);
-                }
-                else if (gearShiftInput = Input.GetKeyDown(KeyCode.Q))
-                {
-                    gearShift--;
-                    yield return new WaitForSeconds(3);
-                }
-
-            }
-        */
-    
-    }
-
-    private void GearShift()
-    {
-        if (Input.GetKey(KeyCode.Alpha1))
-        {
-
-            gearShift = 1;
-
-        }
-        else if (Input.GetKey(KeyCode.Alpha2))
-        {
-            if (currentSpeed >= 15)
-            {
-                gearShift = 2;
-
-            }
-
-        }
-        else if (Input.GetKey(KeyCode.Alpha3))
-        {
-            if (currentSpeed >= 30) 
-            { 
-                gearShift = 3; 
-            
-            }
-
-        }
-        else if (Input.GetKey(KeyCode.Alpha4))
-        {
-            if (currentSpeed >= 45)
-            {
-                gearShift = 4;
-            }
-            
-        
-        }
-        else if (Input.GetKey(KeyCode.Alpha5))
-        {
-            if (currentSpeed >= 60)
-            {
-                gearShift = 5;
-            }
-            
-                  
-        }
-        else if (Input.GetKey(KeyCode.Alpha6))
-        {
-            if (currentSpeed >= 75)
-            {
-                gearShift = 6;
-            }
-            
-
-        }
-        else
-        {
-            Input.GetKey(KeyCode.Alpha0);
-        }
-        /**
-        if (Input.GetKey(KeyCode.Alpha1))
-        {
-            gearShift = 1;
-
-
-        } 
-        else if (Input.GetKey(KeyCode.Alpha2))
-        {
-            if (currentSpeed >= 15)
-            {
-                Debug.Log("1");
-                if (gearShift >= 4)
-                {
-                    Debug.Log("2");
-                    gearShift = 2;
-                    test = true;
-                }
-                if ( gearShift !>= 4)
-                {
-                    Debug.Log("3");
-                    gearShift = 2;
-                    test = true;
-                }
-            }
-           
-
-        } 
-        else if (Input.GetKey(KeyCode.Alpha3))
-        {
-            if (currentSpeed >= 30)
-            {
-                if (gearShift !<= 1 && gearShift !>= 5)
-                {
-                    gearShift = 3;
-                    test = true;
-                }
-            }
-
-
-        } 
-        else if (Input.GetKey(KeyCode.Alpha4))
-        {
-            if (currentSpeed >= 45)
-            {
-                if (gearShift !<= 2 && gearShift !>= 6)
-                {
-                    gearShift = 4;
-                    test = true;
-                }
-            }
-            
-
-        } 
-        else if (Input.GetKey(KeyCode.Alpha5))
-        {
-            if (currentSpeed >= 70)
-            {
-                if (gearShift !<= 3 && gearShift !>= 7)
-                {
-                    gearShift = 5;
-                    test = true;
-                }
-            }
-            
-
-        } 
-        else if (Input.GetKey(KeyCode.Alpha6))
-        {
-            if (currentSpeed >= 100)
-            {
-                if (gearShift !<= 4 && gearShift !>= 8)
-                {
-                    gearShift = 6;
-                    test = true;
-                }
-            }
-
-
-        } 
-        else
-        {
-            Input.GetKey(KeyCode.Alpha0);
-        } 
-        */
-        
     }
 
     private void HandleMotor()
     {
         rb = GetComponent<Rigidbody>();
         currentSpeed = rb.velocity.magnitude * 3.6f;
-        
-
-        switch (gearShift) {
-            case 0:
-                motorForce = 0;
+       
 
 
-                break;
-            case 1:
-                motorForce = 100;
 
-
-                break;
-            case 2:
-                motorForce = 200;
-
-
-                break;
-            case 3:
-                motorForce = 300;
-
-
-                break;
-            case 4:
-                motorForce = 400;
-
-
-                break;
-            case 5:
-                motorForce = 500;
-
-
-                break;
-            default:
-                if (gearShift<0)
-                {
-                    gearShift = 0;
-                }
-                if (gearShift > 5)
-                {
-                    gearShift = 5;
-                }
-                break;
+        if (currentSpeed >= 0f && currentSpeed < maxSpeed)
+        {
+            FRWCollider.motorTorque = verticalInput * motorForce;
+            FLWCollider.motorTorque = verticalInput * motorForce;
+           // RLWCollider.motorTorque = verticalInput * motorForce;
+           // RRWCollider.motorTorque = verticalInput * motorForce;
+            gearShift = 1;
         }
-
-        FRWCollider.motorTorque = verticalInput * motorForce;
-        FLWCollider.motorTorque = verticalInput * motorForce;
-
+        else if (currentSpeed >= 20f && currentSpeed < maxSpeed)
+        {
+            FRWCollider.motorTorque = verticalInput * motorForce;
+            FLWCollider.motorTorque = verticalInput * motorForce;
+         //   RLWCollider.motorTorque = verticalInput * motorForce;
+          //  RRWCollider.motorTorque = verticalInput * motorForce;
+            gearShift = 2;
+        }
+        else if (currentSpeed >= 40f && currentSpeed < maxSpeed)
+        {
+            FRWCollider.motorTorque = verticalInput * motorForce;
+            FLWCollider.motorTorque = verticalInput * motorForce;
+          //  RLWCollider.motorTorque = verticalInput * motorForce;
+           // RRWCollider.motorTorque = verticalInput * motorForce;
+            gearShift = 3;
+        }
+        else if (currentSpeed >= 60f && currentSpeed < maxSpeed)
+        {
+            FRWCollider.motorTorque = verticalInput * motorForce;
+            FLWCollider.motorTorque = verticalInput * motorForce;
+          //  RLWCollider.motorTorque = verticalInput * motorForce;
+          // RRWCollider.motorTorque = verticalInput * motorForce;
+            gearShift = 4;
+        }
+        
+        else if (currentSpeed >= 80f && currentSpeed < maxSpeed)
+        {
+            FRWCollider.motorTorque = verticalInput * motorForce;
+            FLWCollider.motorTorque = verticalInput * motorForce;
+           // RLWCollider.motorTorque = verticalInput * motorForce;
+           // RRWCollider.motorTorque = verticalInput * motorForce;
+            gearShift = 5;
+        }
+        else if (currentSpeed >= maxSpeed)
+        {
+            FLWCollider.motorTorque = 0f;
+            FRWCollider.motorTorque = 0f;
+           // RLWCollider.motorTorque = 0f;
+          //  RRWCollider.motorTorque = 0f;
+        }
+        else
+        {
+            FRWCollider.motorTorque = verticalInput * motorForce;
+            FLWCollider.motorTorque = verticalInput * motorForce;
+          //  RLWCollider.motorTorque = verticalInput * motorForce;
+           // RRWCollider.motorTorque = verticalInput * motorForce;
+        }
         currentBreakForce = isBreaking ? breakForce : 0f;
         if (isBreaking)
         {
@@ -318,6 +164,7 @@ public class CarController : MonoBehaviour
         currentSteerAngle = maxSteerAngle * horizontalInput;
         FLWCollider.steerAngle = currentSteerAngle;
         FRWCollider.steerAngle = currentSteerAngle;
+
     }
 
     private void UpdateWheels()
@@ -366,6 +213,20 @@ public class CarController : MonoBehaviour
 
             }
 
-        }
+     }
+
+    private void Teleport()
+    {
+
+
+
+        transform.position = spawnpoint.position;
+        transform.rotation = spawnpoint.rotation;
+
+
     }
+
+
+
+}
 

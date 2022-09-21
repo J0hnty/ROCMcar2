@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 188338691566276380}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.02, y: 2.64, z: -7.35}
+  m_LocalPosition: {x: 0.02, y: 1.21, z: 1.48}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -795,7 +795,7 @@ GameObject:
   - component: {fileID: 4395092077852915242}
   m_Layer: 0
   m_Name: car 1 1
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -809,7 +809,7 @@ Transform:
   m_GameObject: {fileID: 6351264823566619917}
   m_LocalRotation: {x: -0.016903492, y: -0.6869082, z: 0.017873563, w: 0.7263277}
   m_LocalPosition: {x: 489.54156, y: 0.00001001358, z: 520.3085}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1330990977552543575}
@@ -895,17 +895,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cc5269b2d842124ca7fc6fa993fb82c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  horizontalInput: 0
+  verticalInput: 0
   isBreaking: 0
   currentSpeed: 0
-  spawnpoint: {fileID: 7973262603252285, guid: 9447f18772a35db4c9ec580667306031, type: 3}
+  spawnpoint: {fileID: 7774171923713508957, guid: 618bc187b5ba4ff4d8e9a8c5f6133a1f, type: 3}
   maxSpeed: 9999999
-  gearShift: 0
+  gearShift: 1
   car: {fileID: 6351264823566619917}
   rb: {fileID: 0}
   isRespawning: 0
-  motorForce: 0
+  motorForce: 500
   breakForce: 6000
-  maxSteerAngle: 80
+  maxSteerAngle: 50
   FLWCollider: {fileID: 7835027447938144841}
   FRWCollider: {fileID: 8614189108454907832}
   RLWCollider: {fileID: 5776784525221449469}

@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     public Transform spawnpoint;
     public GameObject car;
     public GameObject spawnedCar;
+    public float penalty;
 
     public CarController CC;
     public GameObject needle;
