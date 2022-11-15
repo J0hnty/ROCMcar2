@@ -8,7 +8,7 @@ using static GameManager;
 public class CarController : MonoBehaviour
 {
     private const string HORIZONTAL = "Horizontal";
-    private const string VERTICAL = "Vertical";
+    public const string VERTICAL = "Vertical";
 
     public float horizontalInput;
     public float verticalInput;
@@ -29,6 +29,14 @@ public class CarController : MonoBehaviour
     public float maxGear = 0;
     public float motorForceMultiplier = 0;
     //=========
+    public float engineRPM;
+    public float maxRPM;
+    public bool test;
+
+    public float pitchMultiplier = 0;
+
+    //!!!
+    public static CarController cc;
 
     public GameManager gameManager;
     public GameObject GMO;
@@ -49,6 +57,9 @@ public class CarController : MonoBehaviour
 
     private void Start()
     {
+        //!!!
+        cc = this;
+
         GMO = GameObject.Find("GameManager");
         gameManager = GMO.GetComponent<GameManager>();
     }
@@ -94,15 +105,15 @@ public class CarController : MonoBehaviour
         if (gearShiftHold - oldGearShift == 1)
         {
             oldGearShift++;
-            Debug.Log("if");
+            Debug.Log("opschakelen");
             ChangeMotorForce();
         }
         else if (
-          gearShiftHold - oldGearShift == -1 ||
-          gearShiftHold - oldGearShift == -2 ||
-          gearShiftHold - oldGearShift == -3 ||
-          gearShiftHold - oldGearShift == -4 ||
-          gearShiftHold - oldGearShift == -5)
+         gearShiftHold - oldGearShift == -1 ||
+         gearShiftHold - oldGearShift == -2 ||
+         gearShiftHold - oldGearShift == -3 ||
+         gearShiftHold - oldGearShift == -4 ||
+         gearShiftHold - oldGearShift == -5)
         {
             oldGearShift--;
             Debug.Log("terug schakelen");
@@ -110,14 +121,12 @@ public class CarController : MonoBehaviour
         }
         else if (gearShiftHold - oldGearShift >= 2)
         {
-            Debug.Log("else if");
+            Debug.Log("slechte schakel");
             gearShift = 0;
             oldGearShift = 0;
             ChangeMotorForce();
         }
     }
-
-
     private void ChangeMotorForce()
     {
         Debug.Log("motor force");
@@ -127,30 +136,37 @@ public class CarController : MonoBehaviour
         {
             case 0:
                 motorForce = 0;
+                pitchMultiplier = 0f;
                 Debug.Log("gear 0");
                 break;
             case 1:
                 motorForce = 200;
+                pitchMultiplier = 0.1f;
                 Debug.Log("gear 1");
                 break;
             case 2:
                 motorForce = 300;
+                pitchMultiplier = 0.2f;
                 Debug.Log("gear 2");
                 break;
             case 3:
                 motorForce = 400;
+                pitchMultiplier = 0.3f;
                 Debug.Log("gear 3");
                 break;
             case 4:
                 motorForce = 550;
+                pitchMultiplier = 0.4f;
                 Debug.Log("gear 4");
                 break;
             case 5:
                 motorForce = 600;
+                pitchMultiplier = 0.5f;
                 Debug.Log("gear 5");
                 break;
             case 6:
                 motorForce = 700;
+                pitchMultiplier = 0.6f;
                 Debug.Log("gear 6");
                 break;
             default:
@@ -159,7 +175,7 @@ public class CarController : MonoBehaviour
                 break;
         }
     }
-
+    // deze functie zorgt er voor dat de gearshift wordt gegeven.
     private void GearShift()
     {
         GearChangeCheck(gearShift);
@@ -207,8 +223,7 @@ public class CarController : MonoBehaviour
             GearChangeCheck(gearShift);
         }
     }
-
-    // deze functie zorgt voor alles wat met de motor te maken heeft
+    // deze functie zorgt voor alles wat met de motor te maken heeft.
     private void HandleMotor()
     {
         // hier komt de rigidbody 'auto' binnen
@@ -231,8 +246,7 @@ public class CarController : MonoBehaviour
             UnApplyBreaking();
         }
     }
-
-    // deze functie zorgt er voor dat je kunt remmen
+    // deze functie zorgt er voor dat je kunt remmen.
     private void ApplyBreaking()
     {
         FRWCollider.brakeTorque = currentBreakForce;
@@ -240,8 +254,7 @@ public class CarController : MonoBehaviour
         RRWCollider.brakeTorque = currentBreakForce;
         RLWCollider.brakeTorque = currentBreakForce;
     }
-
-    // deze functie zorgt er voor dat je kunt stopen remmen
+    // deze functie zorgt er voor dat je kunt stopen remmen.
     private void UnApplyBreaking()
     {
         FRWCollider.brakeTorque = 0f;
@@ -249,7 +262,6 @@ public class CarController : MonoBehaviour
         RRWCollider.brakeTorque = 0f;
         RLWCollider.brakeTorque = 0f;
     }
-
     // deze functie zorgt er voor dat je kan sturen
     // door middel van formules.
     private void HandleSteering()
@@ -259,9 +271,8 @@ public class CarController : MonoBehaviour
         FRWCollider.steerAngle = currentSteerAngle;
 
     }
-
     // deze functie zorgt er voor dat de wielen
-    // mee gaan met de inputs van de user
+    // mee gaan met de inputs van de user.
     private void UpdateWheels()
     {
         UpdateSingleWheel(FLWCollider, FLWTransform);
@@ -269,7 +280,6 @@ public class CarController : MonoBehaviour
         UpdateSingleWheel(RLWCollider, RLWTransform);
         UpdateSingleWheel(RRWCollider, RRWTransform);
     }
-
     // deze functie zorgt er voor dat het wiel wat meegegeven wordt
     // mee gaat met de input van de user.
     private void UpdateSingleWheel(WheelCollider WCollider, Transform WTransform)
@@ -280,18 +290,22 @@ public class CarController : MonoBehaviour
         WTransform.rotation = rot;
         WTransform.position = pos;
     }
-
     // deze functie zorgt er voor dat als voorbeeld:
-    // jij van de map valt dat je weer in de map teregt komt.
+    // jij van de map valt dat je weer in de map terecht komt.
     private void OnCollisionEnter(Collision collision)
     {
+        if (collision.collider.CompareTag("Building") || collision.collider.CompareTag("Fences"))
+        {
+            FindObjectOfType<backGroundManager>().PlaySound("Toeter");
+        }
+
         if (collision.collider.CompareTag("WorldEnd"))
         {
+            FindObjectOfType<backGroundManager>().PlaySound("Toeter");
             Respawn();
         }
     }
-
-    // zorgt ervoor dat je respawnd
+    // zorgt ervoor dat je respawnd zonder snelheid en dergelijken.
     private void Respawn()
     {
             rb = GetComponent<Rigidbody>();
@@ -311,8 +325,8 @@ public class CarController : MonoBehaviour
             }
 
 
-     }
-
+    }
+    // teleport je zonder aanpassingen aan te brengen.
     private void Teleport()
     {
 
@@ -321,8 +335,5 @@ public class CarController : MonoBehaviour
 
 
     }
-
-
-
 }
 

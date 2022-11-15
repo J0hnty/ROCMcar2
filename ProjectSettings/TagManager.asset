@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - WorldEnd
+  - Building
+  - Fences
   layers:
   - Default
   - TransparentFX
