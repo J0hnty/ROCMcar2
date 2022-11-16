@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using static CarController;
+using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
     public Transform spawnpoint;
     public GameObject car;
     public GameObject spawnedCar;
+    public bool isSpawned;
     public float penalty;
 
     public TextMeshProUGUI warningUI;
@@ -18,13 +20,17 @@ public class GameManager : MonoBehaviour
     private float desiredPos;
     public float vehicleSpeed;
 
+    public GameObject mirrorScreen;
+
     // Start is called before the first frame update
     void Start()
     {
-      spawnedCar = Instantiate(car, spawnpoint.position, spawnpoint.rotation);
+        spawnedCar = Instantiate(car, spawnpoint.position, spawnpoint.rotation);
         spawnedCar.name = "ROCMcar";
-       CC = spawnedCar.GetComponent<CarController>();
+        CC = spawnedCar.GetComponent<CarController>();
         warningUI.text = "";
+
+
     }
 
     private void FixedUpdate()
