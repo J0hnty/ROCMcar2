@@ -80,6 +80,9 @@ public class CarController : MonoBehaviour
             Respawn();
         if (Input.GetKey(KeyCode.T))
             Teleport();
+        if (currentSpeed >= maxSpeed)
+            currentSpeed = maxSpeed;
+
     }
 
 
@@ -183,7 +186,6 @@ public class CarController : MonoBehaviour
     private void GearShift()
     {
         GearChangeCheck(gearShift);
-        //GearInputs();
         // deze if statements moeten er voor zorgen dat-
         // de auto in een versnelling gaat.
         if (Input.GetKey(KeyCode.Alpha1))

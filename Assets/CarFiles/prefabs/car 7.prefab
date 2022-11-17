@@ -1710,7 +1710,7 @@ GameObject:
   - component: {fileID: 6194747743814368280}
   - component: {fileID: 1226182174541667205}
   m_Layer: 0
-  m_Name: car 3
+  m_Name: car 7
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1763,7 +1763,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 98bc34ddef060be4ea47e99161e9df8f, type: 2}
+  - {fileID: 2100000, guid: 4c07e1155aa468546bf2ba910e73cf33, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1824,8 +1824,8 @@ MonoBehaviour:
   car: {fileID: 9084532234282837402}
   rb: {fileID: 0}
   isRespawning: 0
-  maxSpeed: 150
-  maxGear: 5
+  maxSpeed: 100
+  maxGear: 0
   motorForceMultiplier: 0
   engineRPM: 0
   maxRPM: 0
