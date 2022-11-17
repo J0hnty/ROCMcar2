@@ -31,15 +31,19 @@ public class CarController : MonoBehaviour
     //=========
     public float engineRPM;
     public float maxRPM;
-    public bool test;
+    public bool test; 
+    
 
     public float pitchMultiplier = 0;
 
-    //!!!
+
     public static CarController cc;
 
     public GameManager gameManager;
     public GameObject GMO;
+
+    //Menu 
+    public bool carSwitchMenu = false;
 
     [SerializeField] private float motorForce;
     [SerializeField] private float breakForce;
@@ -84,7 +88,7 @@ public class CarController : MonoBehaviour
     {
         horizontalInput = Input.GetAxis(HORIZONTAL);
         verticalInput = Input.GetAxis(VERTICAL);
-        if (!isRespawning)
+        if (!isRespawning && !carSwitchMenu)
             isBreaking = Input.GetKey(KeyCode.Space);
     }
     private void GearChangeCheck(int gearShiftHold)
@@ -304,9 +308,21 @@ public class CarController : MonoBehaviour
             FindObjectOfType<backGroundManager>().PlaySound("Toeter");
             Respawn();
         }
+
+
     }
-    // zorgt ervoor dat je respawnd zonder snelheid en dergelijken.
-    private void Respawn()
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("CarSwitch"))
+        {
+            carSwitchMenu = true;
+            rb.Sleep();
+            isBreaking = true;
+            
+        }
+    }
+        // zorgt ervoor dat je respawnd zonder snelheid en dergelijken.
+        private void Respawn()
     {
             rb = GetComponent<Rigidbody>();
             rb.Sleep();

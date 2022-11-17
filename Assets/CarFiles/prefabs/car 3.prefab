@@ -372,6 +372,7 @@ MonoBehaviour:
   pitchMultiplier: 0
   gameManager: {fileID: 0}
   GMO: {fileID: 0}
+  carSwitchMenu: 0
   motorForce: 0
   breakForce: 6000
   maxSteerAngle: 50
@@ -1221,7 +1222,7 @@ GameObject:
   - component: {fileID: 8988446043675473112}
   m_Layer: 0
   m_Name: Camera
-  m_TagString: Untagged
+  m_TagString: CarCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
