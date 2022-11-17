@@ -50091,7 +50091,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnpoint: {fileID: 2685077371172379136}
-  car: {fileID: 9084532234282837402, guid: 56d788e47bdd34f479478406bc995bcb, type: 3}
+  car: {fileID: 9084532234282837402, guid: cdc1c3bb369d81945bcc236a9e2a02d0, type: 3}
   spawnedCar: {fileID: 0}
   isSpawned: 0
   penalty: 0

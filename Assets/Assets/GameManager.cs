@@ -29,8 +29,6 @@ public class GameManager : MonoBehaviour
         spawnedCar.name = "ROCMcar";
         CC = spawnedCar.GetComponent<CarController>();
         warningUI.text = "";
-
-
     }
 
     private void FixedUpdate()
