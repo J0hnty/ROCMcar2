@@ -2,16 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using static CarController;
 using Unity.VisualScripting;
+using static CarController;
+using static RememberCar;
 
 public class GameManager : MonoBehaviour
 {
     public Transform spawnpoint;
-    public GameObject car;
+    public GameObject[] car;
     public GameObject spawnedCar;
     public bool isSpawned;
     public float penalty;
+
+    // remember Car Script
+    public RememberCar RCS;
+    // remember Car
+    public GameObject RC;
+
 
     public TextMeshProUGUI warningUI;
     public CarController CC;
@@ -25,7 +32,10 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        spawnedCar = Instantiate(car, spawnpoint.position, spawnpoint.rotation);
+        RC = GameObject.Find("RememberCar");
+        RCS = RC.GetComponent<RememberCar>();
+
+        spawnedCar = Instantiate(car[RCS.CarUsed], spawnpoint.position, spawnpoint.rotation);
         spawnedCar.name = "ROCMcar";
         CC = spawnedCar.GetComponent<CarController>();
         warningUI.text = "";

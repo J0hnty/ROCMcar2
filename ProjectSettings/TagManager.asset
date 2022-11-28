@@ -9,6 +9,7 @@ TagManager:
   - Fences
   - CarSwitch
   - CarCamera
+  - CarModel
   layers:
   - Default
   - TransparentFX

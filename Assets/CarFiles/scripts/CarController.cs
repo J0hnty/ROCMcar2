@@ -2,8 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 using static GameManager;
+using UnityEditor.SearchService;
 
 public class CarController : MonoBehaviour
 {
@@ -31,8 +33,8 @@ public class CarController : MonoBehaviour
     //=========
     public float engineRPM;
     public float maxRPM;
-    public bool test; 
-    
+    public bool test;
+    public bool loaded;
 
     public float pitchMultiplier = 0;
 
@@ -41,6 +43,7 @@ public class CarController : MonoBehaviour
 
     public GameManager gameManager;
     public GameObject GMO;
+    public GameObject[] cameraArray;
 
     //Menu 
     public bool carSwitchMenu = false;
@@ -147,7 +150,7 @@ public class CarController : MonoBehaviour
                 Debug.Log("gear 0");
                 break;
             case 1:
-                motorForce = 200;
+                motorForce = 2000;
                 pitchMultiplier = 0.1f;
                 Debug.Log("gear 1");
                 break;
@@ -315,16 +318,23 @@ public class CarController : MonoBehaviour
     }
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("CarSwitch"))
+        
+        /**if (other.CompareTag("CarSwitch"))
         {
             carSwitchMenu = true;
             rb.Sleep();
             isBreaking = true;
-            
+            SceneManager.LoadScene("CarSwitchScene");
+        }*/
+        if (other.CompareTag("CarSwitch"))
+        {
+            SceneManager.UnloadSceneAsync("Citymap");
+            gameManager.spawnedCar.SetActive(false);
+            SceneManager.LoadSceneAsync("CarSwitchScene" , LoadSceneMode.Additive);
         }
     }
         // zorgt ervoor dat je respawnd zonder snelheid en dergelijken.
-        private void Respawn()
+    private void Respawn()
     {
             rb = GetComponent<Rigidbody>();
             rb.Sleep();

@@ -13259,7 +13259,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1244707353353472, guid: f7280f1ae517d4f47bf6edd184c9b955, type: 3}
       propertyPath: m_Name
-      value: SM_Icon_SelectionRing_07
+      value: CarSwitcher
       objectReference: {fileID: 0}
     - target: {fileID: 1244707353353472, guid: f7280f1ae517d4f47bf6edd184c9b955, type: 3}
       propertyPath: m_TagString
@@ -50182,10 +50182,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnpoint: {fileID: 2685077371172379136}
-  car: {fileID: 9084532234282837402, guid: cdc1c3bb369d81945bcc236a9e2a02d0, type: 3}
+  car:
+  - {fileID: 9084532234282837402, guid: 56d788e47bdd34f479478406bc995bcb, type: 3}
+  - {fileID: 9084532234282837402, guid: cdc1c3bb369d81945bcc236a9e2a02d0, type: 3}
+  - {fileID: 9084532234282837402, guid: 2e0bd29315f00174db6b1c5e6868428f, type: 3}
+  - {fileID: 9084532234282837402, guid: 8b36f0828ebdac94984df7d502f776fa, type: 3}
+  - {fileID: 9084532234282837402, guid: 7c71f9109f9e2364a88c613b0fec2956, type: 3}
   spawnedCar: {fileID: 0}
   isSpawned: 0
   penalty: 0
+  RCS: {fileID: 0}
+  RC: {fileID: 0}
   warningUI: {fileID: 1896699401}
   CC: {fileID: 0}
   needle: {fileID: 1250410167}
